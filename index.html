@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowchart Perkalian dengan Mermaid</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 1200px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .input-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        input {
+            padding: 12px 20px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 150px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #764ba2;
+        }
+
+        button {
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #764ba2;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .flowchart-section, .result-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flowchart-section h2, .result-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .result-table {
+            overflow-y: auto;
+            max-height: 600px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            flex: 1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            background: #667eea;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        th {
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tbody tr:nth-child(odd) {
+            background: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background: #f0f4ff;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #999;
+            padding: 60px 20px;
+            font-size: 18px;
+        }
+
+        .error {
+            color: #ff6b6b;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .stats {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            border: 2px solid #667eea;
+        }
+
+        .stats p {
+            color: #333;
+            font-weight: 500;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Flowchart Perkalian N × 10</h1>
+        <p class="subtitle">Visualisasi algoritma perkalian dengan input nilai N</p>
+
+        <div class="input-section">
+            <input type="number" id="inputN" placeholder="Masukkan N (1-10)" min="1" max="10">
+            <button onclick="generateFlowchart()">🎨 Buat Flowchart</button>
+        </div>
+
+        <div class="info-box">
+            <strong>ℹ️ Penjelasan:</strong><br>
+            • Input nilai N antara 1-10<br>
+            • Flowchart akan menampilkan perkalian dari 1×1 hingga 10×N<br>
+            • Loop pertama (i) untuk angka 1-10, Loop kedua (j) untuk angka 1-N
+        </div>
+
+        <div class="content">
+            <!-- Flowchart Section -->
+            <div class="flowchart-section">
+                <h2>🔄 Diagram Alur (Flowchart)</h2>
+                <div class="mermaid" id="flowchartContainer">
+                    flowchart TD
+                        Start([START]) --> Input["📥 Input: N"]
+                        Input --> Init1["i = 1"]
+                        Init1 --> Check1{"i ≤ 10?"}
+                        Check1 -->|TIDAK| End([END])
+                        Check1 -->|YA| Init2["j = 1"]
+                        Init2 --> Check2{"j ≤ N?"}
+                        Check2 -->|TIDAK| Inc1["i = i + 1"]
+                        Check2 -->|YA| Calc["result = i × j"]
+                        Calc --> Display["📊 Tampilkan hasil"]
+                        Display --> Inc2["j = j + 1"]
+                        Inc2 --> Check2
+                        Inc1 --> Check1
+                        
+                        style Start fill:#ff6b6b,color:#fff,stroke:#ff5252,stroke-width:3px
+                        style End fill:#ff6b6b,color:#fff,stroke:#ff5252,stroke-width:3px
+                        style Check1 fill:#ffd93d,color:#333,stroke:#ffb700,stroke-width:2px
+                        style Check2 fill:#ffd93d,color:#333,stroke:#ffb700,stroke-width:2px
+                        style Input fill:#4ecdc4,color:#fff,stroke:#45b3aa,stroke-width:2px
+                        style Init1 fill:#4ecdc4,color:#fff,stroke:#45b3aa,stroke-width:2px
+                        style Init2 fill:#4ecdc4,color:#fff,stroke:#45b3aa,stroke-width:2px
+                        style Inc1 fill:#4ecdc4,color:#fff,stroke:#45b3aa,stroke-width:2px
+                        style Inc2 fill:#4ecdc4,color:#fff,stroke:#45b3aa,stroke-width:2px
+                        style Calc fill:#667eea,color:#fff,stroke:#5568d3,stroke-width:2px
+                        style Display fill:#667eea,color:#fff,stroke:#5568d3,stroke-width:2px
+                </div>
+            </div>
+
+            <!-- Result Section -->
+            <div class="result-section">
+                <h2>📈 Hasil Perkalian</h2>
+                <div class="result-table" id="resultContainer">
+                    <div class="no-data">Masukkan nilai N terlebih dahulu</div>
+                </div>
+                <div class="stats" id="stats"></div>
+                <div class="error" id="errorMsg"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+
+        function generateFlowchart() {
+            const inputN = document.getElementById('inputN').value;
+            const errorMsg = document.getElementById('errorMsg');
+            const resultContainer = document.getElementById('resultContainer');
+            const statsDiv = document.getElementById('stats');
+
+            errorMsg.textContent = '';
+            statsDiv.innerHTML = '';
+
+            // Validasi input
+            if (!inputN || inputN === '') {
+                errorMsg.textContent = '❌ Harap masukkan nilai N terlebih dahulu!';
+                return;
+            }
+
+            const n = parseInt(inputN);
+
+            if (isNaN(n) || n < 1 || n > 10) {
+                errorMsg.textContent = '❌ Nilai N harus antara 1 sampai 10!';
+                return;
+            }
+
+            // Generate hasil perkalian
+            generateResults(n);
+
+            // Tampilkan statistik
+            statsDiv.innerHTML = `
+                <p>✅ Input N = <strong>${n}</strong></p>
+                <p>📊 Total hasil perkalian: <strong>${10 * n}</strong> baris</p>
+                <p>🔢 Range: <strong>1×1</strong> hingga <strong>10×${n}</strong></p>
+            `;
+        }
+
+        function generateResults(n) {
+            const resultContainer = document.getElementById('resultContainer');
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Perkalian</th>
+                            <th>Hasil</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            for (let i = 1; i <= 10; i++) {
+                for (let j = 1; j <= n; j++) {
+                    const result = i * j;
+                    html += `<tr><td><strong>${i} × ${j}</strong></td><td>${result}</td></tr>`;
+                }
+            }
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+            resultContainer.innerHTML = html;
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('inputN').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                generateFlowchart();
+            }
+        });
+
+        // Auto-focus input
+        document.getElementById('inputN').focus();
+    </script>
+</body>
+</html>
